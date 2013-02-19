@@ -26,6 +26,7 @@
 from gi.repository import Nautilus, GObject, Gtk, GdkPixbuf
 import urllib, subprocess, re
 import locale, gettext
+import os
 
 APP_NAME = "NautilusOptirun"
 LOCALE_PATH = "/usr/share/locale/"
@@ -52,7 +53,9 @@ class NautilusOptirun(GObject.GObject, Nautilus.MenuProvider):
 
     def run(self, menu, source_path):
         """Runs the Adding of selected file via optirun"""
-        bash_string = "optirun %s &" % source_path
+        executable = os.system("grep 'Exec=' " + source_path + " |sed s/Exec=// ")
+        print executable
+        bash_string = "optirun %s &" % executable	
         subprocess.call(bash_string, shell=True)
 
     def get_file_items(self, window, sel_items):
